@@ -19,7 +19,7 @@ public class main {
 
 		try (PrintWriter writer = new PrintWriter(new FileWriter("output.csv"))) {
 			// Write header to CSV file
-			writer.println("Fichier - WelzlTime - NaifTime");
+			writer.println("WelzlTime - NaifTime");
 
 			for (File x : listFic) {
 				ArrayList<Point> points = Utils.readFile(x.getPath());
@@ -32,7 +32,8 @@ public class main {
 				Circle cn = dt.naif(points);
 				long tempsN = System.nanoTime() - debutN;
 
-				writer.println(x.getPath() + " - " + tempsW + " - " + tempsN);
+				writer.println(tempsW + " - " + tempsN);
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
