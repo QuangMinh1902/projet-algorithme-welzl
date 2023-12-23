@@ -173,12 +173,13 @@ public class DefaultTeam {
     return cercle;
   }
 
-  private boolean contains(Circle c, Point p) {
+  private boolean estInterieur(Circle c, Point p) {
     if (p.distance(c.getCenter()) - c.getRadius() < 0.00001) {
       return true;
     }
     return false;
   }
+
 
   // dessiner la base minimum disk, un cercle le minimum de point
   private Circle bmd(ArrayList<Point> P, ArrayList<Point> R) {
@@ -200,7 +201,7 @@ public class DefaultTeam {
       cercle = new Circle(p, (int) Math.ceil(d));
     } else {
       if (R.size() == 3)
-        cercle = circle3point(R.get(0), R.get(1), R.get(2));
+        cercle = cercle_avec_3point(R.get(0), R.get(1), R.get(2));
     }
 
     return cercle;

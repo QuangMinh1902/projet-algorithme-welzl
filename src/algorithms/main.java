@@ -4,10 +4,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import algorithms.DefaultTeam;
 
 import supportGUI.Circle;
 
-public class Main {
+public class main {
 	public static void main(String[] args) {
 		// Instantiation de l'équipe par défaut
 		DefaultTeam defaultTeam = new DefaultTeam();
@@ -30,12 +31,12 @@ public class Main {
 				// Calcul du temps d'exécution de l'algorithme de Welzl
 				long debutWelzl = System.nanoTime();
 				Circle cercleWelzl = defaultTeam.welzl(points);
-				long tempsWelzl = System.nanoTime() - debutWelzl;
+				long tempsWelzl = (System.nanoTime() - debutWelzl) / 1_000; // Conversion en millisecondes
 
 				// Calcul du temps d'exécution de l'algorithme naif
 				long debutNaif = System.nanoTime();
 				Circle cercleNaif = defaultTeam.naif(points);
-				long tempsNaif = System.nanoTime() - debutNaif;
+				long tempsNaif = (System.nanoTime() - debutNaif) / 1_000; // Conversion en millisecondes
 
 				// Écriture des temps d'exécution dans le fichier CSV
 				writer.println(tempsWelzl + " - " + tempsNaif);
