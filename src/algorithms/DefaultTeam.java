@@ -111,7 +111,7 @@ public class DefaultTeam {
     return new Circle(new Point((int)resX,(int)resY),(int)Math.sqrt(resRadiusSquared));
   }
 
-  private Circle Ritter(ArrayList<Point> points){
+ // private Circle Ritter(ArrayList<Point> points){
     if (points.size()<1) return null;
     ArrayList<Point> rest = (ArrayList<Point>)points.clone();
     Point dummy=rest.get(0);
@@ -146,7 +146,7 @@ public class DefaultTeam {
   }
 
   private Circle CercleMin(ArrayList<Point> input, ArrayList<Point> R ) {
-    //P : liste des points donnée
+    //input : liste des points donnée
     //R : liste des points sur la frontière et vide
 
     ArrayList<Point> P = new ArrayList<Point>(input);
