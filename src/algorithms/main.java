@@ -31,12 +31,12 @@ public class main {
 				// Calcul du temps d'exécution de l'algorithme de Welzl
 				long debutWelzl = System.nanoTime();
 				Circle cercleWelzl = defaultTeam.welzl(points);
-				long tempsWelzl = (System.nanoTime() - debutWelzl) / 1_000; // Conversion en millisecondes
+				long tempsWelzl = (System.nanoTime() - debutWelzl) / 1_000; // Conversion en microsecondes
 
 				// Calcul du temps d'exécution de l'algorithme naif
 				long debutNaif = System.nanoTime();
 				Circle cercleNaif = defaultTeam.naif(points);
-				long tempsNaif = (System.nanoTime() - debutNaif) / 1_000; // Conversion en millisecondes
+				long tempsNaif = (System.nanoTime() - debutNaif) / 1_000; // Conversion en microsecondes
 
 				// Écriture des temps d'exécution dans le fichier CSV
 				writer.println(tempsWelzl + " - " + tempsNaif);
