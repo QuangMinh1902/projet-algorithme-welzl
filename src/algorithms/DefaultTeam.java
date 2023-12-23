@@ -16,8 +16,6 @@ public class DefaultTeam {
 
     return diameter(points);
   }
-
-
   public Circle calculCercleMin(ArrayList<Point> points) {
     // calculCercleMin: ArrayList<Point> --> Circle
     //   renvoie un cercle couvrant tout point de la liste, de rayon minimum.
@@ -30,17 +28,10 @@ public class DefaultTeam {
     if (points.size()<3) {
       return null;
     }
-
     ArrayList<Point> enveloppe = new ArrayList<Point>();
-
     enveloppe.add(points.get(0));
     enveloppe.add(points.get(1));
     enveloppe.add(points.get(2));
-
-
-    /*******************
-     * PARTIE A ECRIRE *
-     *******************/
     return points;
   }
 
@@ -52,15 +43,10 @@ public class DefaultTeam {
     return new Line(p,q);
   }
 
-
   public Circle naif(ArrayList<Point> inputPoints){
-
     ArrayList<Point> points = (ArrayList<Point>) inputPoints.clone();
-
     if (points.size()<1) return null;
-
     double cX,cY,cRadius,cRadiusSquared;
-
     for (Point p: points){
       for (Point q: points){
         cX = .5*(p.x+q.x);
@@ -103,8 +89,6 @@ public class DefaultTeam {
           double mY=.5*(p.y+q.y);
           double nX=.5*(p.x+r.x);
           double nY=.5*(p.y+r.y);
-          //soit y=alpha1*x+beta1 l'equation de la droite passant par m et perpendiculaire a la droite (pq)
-          //soit y=alpha2*x+beta2 l'equation de la droite passant par n et perpendiculaire a la droite (pr)
           double alpha1=(q.x-p.x)/(double)(p.y-q.y);
           double beta1=mY-alpha1*mX;
           double alpha2=(r.x-p.x)/(double)(p.y-r.y);
@@ -120,14 +104,12 @@ public class DefaultTeam {
               allHit = false;
               break;
             }
-          if (allHit) {System.out.println("Found r="+Math.sqrt(cRadiusSquared));resX=cX;resY=cY;resRadiusSquared=cRadiusSquared;}
+          if (allHit) {System.out.println("R ="+Math.sqrt(cRadiusSquared));resX=cX;resY=cY;resRadiusSquared=cRadiusSquared;}
         }
       }
     }
-
     return new Circle(new Point((int)resX,(int)resY),(int)Math.sqrt(resRadiusSquared));
   }
-
 
   private Circle Ritter(ArrayList<Point> points){
     if (points.size()<1) return null;
@@ -158,16 +140,16 @@ public class DefaultTeam {
     return new Circle(new Point((int)cX,(int)cY),(int)cRadius);
   }
 
-
-
 /** circle de l'algorithme de  Welzl */
-
   public Circle welzl(ArrayList<Point> points) {
-    return bMinDisk(points, new ArrayList<Point>());
+    return CercleMin(points, new ArrayList<Point>());
   }
 
-  private Circle bMinDisk(ArrayList<Point> Ps, ArrayList<Point> R) {
-    ArrayList<Point> P = new ArrayList<Point>(Ps);
+  private Circle CercleMin(ArrayList<Point> input, ArrayList<Point> R ) {
+    //P : liste des points donnée
+    //R : liste des points sur la frontière et vide
+
+    ArrayList<Point> P = new ArrayList<Point>(input);
     Random random = new Random();
     Circle cercle = null;
 
@@ -178,18 +160,18 @@ public class DefaultTeam {
       Point p = P.get((random.nextInt(P.size())));
       P.remove(p);
 
-      cercle = bMinDisk(P, R);
+      //recursive : la liste P est modifié
+      cercle = CercleMin(P, R);
 
-      if (cercle != null && !contains(cercle, p)) {
+      if (cercle != null && !estInterieur(cercle, p)) {
         R.add(p);
-        cercle = bMinDisk(P, R);
+        cercle = CercleMin(P, R);
         R.remove(p);
       }
     }
 
     return cercle;
   }
-
 
   private boolean contains(Circle c, Point p) {
     if (p.distance(c.getCenter()) - c.getRadius() < 0.00001) {
@@ -198,19 +180,18 @@ public class DefaultTeam {
     return false;
   }
 
-
+  // dessiner la base minimum disk, un cercle le minimum de point
   private Circle bmd(ArrayList<Point> P, ArrayList<Point> R) {
-
     if (P.isEmpty() && R.size() == 0)
       return new Circle(new Point(0, 0), 10);
-
     Random r = new Random();
     Circle cercle = null;
-
+    // Si il y a un seul point dans la liste , le cercle est .... ce point
     if (R.size() == 1) {
       cercle = new Circle(R.get(0), 0);
     }
 
+    //Si il y a 2 point, le cercle sera formé avec le centre étant le milieu de la distance de ces 2 points
     if (R.size() == 2) {
       double cx = (R.get(0).x + R.get(1).x) / 2;
       double cy = (R.get(0).y + R.get(1).y) / 2;
@@ -225,14 +206,17 @@ public class DefaultTeam {
     return cercle;
   }
 
-
+  //maths : pour calculer la valeur au carré de chaque coordonnée
   private int norm(Point a) {
     return (a.x * a.x) + (a.y * a.y);
   }
 
-  private Circle circle3point(Point a, Point b, Point c) {
+  //dessiner un cercle avec 3 point
+  private Circle cercle_avec_3point(Point a, Point b, Point c) {
+    // Calcul du déterminant pour vérifier si les points sont colinéaires.
     double d = (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) * 2;
 
+    // Si les points sont colinéaires, aucun cercle unique ne peut être formé.
     if (d == 0) return null;
 
     double x = ((norm(a) * (b.y - c.y)) + (norm(b) * (c.y - a.y)) + (norm(c) * (a.y - b.y))) / d;
@@ -241,8 +225,9 @@ public class DefaultTeam {
 
     Point p = new Point((int) x, (int) y);
 
+    //constructeur du Circle a besoind un type de int
+    // Math.ceil pour s'assurer que le rayon du cercle est assez grand pour inclure le point a, même si la distance exacte est un nombre non entier.
     return new Circle(p, (int) Math.ceil(p.distance(a)));
-
   }
 
 }
