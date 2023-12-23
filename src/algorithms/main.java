@@ -1,5 +1,3 @@
-package algorithms;
-
 import java.awt.Point;
 import java.io.File;
 import java.io.FileWriter;
@@ -9,36 +7,41 @@ import java.util.ArrayList;
 
 import supportGUI.Circle;
 
-public class main {
-
+public class Main {
 	public static void main(String[] args) {
-		long debut = System.currentTimeMillis();
-		DefaultTeam dt = new DefaultTeam();
-		String path = "samples/";
-		File[] listFic = Utils.listeRepertoire(path);
+		// Instantiation de l'équipe par défaut
+		DefaultTeam defaultTeam = new DefaultTeam();
+
+		// Chemin du répertoire contenant les fichiers
+		String cheminRepertoire = "samples/";
+
+		// Obtention de la liste des fichiers dans le répertoire
+		File[] listeFichiers = Utils.listerRepertoire(cheminRepertoire);
 
 		try (PrintWriter writer = new PrintWriter(new FileWriter("output.csv"))) {
-			// Write header to CSV file
+			// Écriture de l'en-tête dans le fichier CSV
 			writer.println("WelzlTime - NaifTime");
 
-			for (File x : listFic) {
-				ArrayList<Point> points = Utils.readFile(x.getPath());
+			// Boucle à travers chaque fichier du répertoire
+			for (File fichier : listeFichiers) {
+				// Lecture des points à partir du fichier
+				ArrayList<Point> points = Utils.lireFichier(fichier.getPath());
 
-				long debutW = System.nanoTime();
-				Circle cw = dt.welzl(points);
-				long tempsW = System.nanoTime() - debutW;
+				// Calcul du temps d'exécution de l'algorithme de Welzl
+				long debutWelzl = System.nanoTime();
+				Circle cercleWelzl = defaultTeam.welzl(points);
+				long tempsWelzl = System.nanoTime() - debutWelzl;
 
-				long debutN = System.nanoTime();
-				Circle cn = dt.naif(points);
-				long tempsN = System.nanoTime() - debutN;
+				// Calcul du temps d'exécution de l'algorithme naif
+				long debutNaif = System.nanoTime();
+				Circle cercleNaif = defaultTeam.naif(points);
+				long tempsNaif = System.nanoTime() - debutNaif;
 
-				writer.println(tempsW + " - " + tempsN);
-
+				// Écriture des temps d'exécution dans le fichier CSV
+				writer.println(tempsWelzl + " - " + tempsNaif);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		System.out.println(System.currentTimeMillis() - debut);
 	}
 }

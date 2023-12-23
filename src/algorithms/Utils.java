@@ -1,5 +1,3 @@
-package algorithms;
-
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,53 +8,52 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Utils {
-	
-	
-	public static File[] listeRepertoire ( String path ) {
-		File repertoire = new File(path);
-        File[] list =null;
-        
-        if ( repertoire.isDirectory ( ) ) {
-                 list = repertoire.listFiles();
-               
-        } 
-        return list ;
-} 
 
-	
-	
-	public static ArrayList<Point> readFile(String filename) {
-	    String line;
-	    String[] coordinates;
-	    ArrayList<Point> points=new ArrayList<Point>();
-	    try {
-	      BufferedReader input = new BufferedReader(
-	          new InputStreamReader(new FileInputStream(filename))
-	          );
-	      try {
-	        while ((line=input.readLine())!=null) {
-	          coordinates=line.split("\\s+");
-	          points.add(new Point(Integer.parseInt(coordinates[0]),
-	                Integer.parseInt(coordinates[1])));
-	        }
-	       
-	      } catch (IOException e) {
-	        System.err.println("Exception: interrupted I/O.");
-	      } finally {
-	        try {
-	          input.close();
-	        } catch (IOException e) {
-	          System.err.println("I/O exception: unable to close "+filename);
-	        }
-	      }
-	    } catch (FileNotFoundException e) {
-	      System.err.println("Input file not found.");
-	    }
-	    return points ;
-	  }
+	// Méthode pour obtenir la liste des fichiers dans un répertoire
+	public static File[] listerRepertoire(String chemin) {
+		File repertoire = new File(chemin);
+		File[] listeFichiers = null;
 
-	
-	
+		if (repertoire.isDirectory()) {
+			listeFichiers = repertoire.listFiles();
+		}
 
+		return listeFichiers;
+	}
 
+	// Méthode pour lire les points à partir d'un fichier
+	public static ArrayList<Point> lireFichier(String nomFichier) {
+		String ligne;
+		String[] coordonnees;
+		ArrayList<Point> points = new ArrayList<>();
+
+		try {
+			// Ouverture du fichier en lecture
+			BufferedReader lecteur = new BufferedReader(
+					new InputStreamReader(new FileInputStream(nomFichier)));
+
+			try {
+				// Lecture des lignes du fichier
+				while ((ligne = lecteur.readLine()) != null) {
+					// Séparation des coordonnées par espace et ajout du point à la liste
+					coordonnees = ligne.split("\\s+");
+					points.add(new Point(Integer.parseInt(coordonnees[0]),
+							Integer.parseInt(coordonnees[1])));
+				}
+			} catch (IOException e) {
+				System.err.println("Exception : Entrée/Sortie interrompue.");
+			} finally {
+				try {
+					// Fermeture du lecteur
+					lecteur.close();
+				} catch (IOException e) {
+					System.err.println("Exception I/O : Impossible de fermer " + nomFichier);
+				}
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println("Fichier d'entrée introuvable.");
+		}
+
+		return points;
+	}
 }
